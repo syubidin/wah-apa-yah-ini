@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Special buat Nona Acit 🌷</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+    <style>
+      /* --- Base Styles --- */
+      body {
+        font-family: 'Quicksand', sans-serif;
+        transition: background 2s ease;
+      }
+
+      .handwriting {
+        font-family: 'Dancing Script', cursive;
+      }
+
+      /* --- Animations --- */
+      .flower-appear {
+        animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        transform-origin: bottom center;
+      }
+
+      @keyframes popUp {
+        0% {
+          transform: scale(0) translateY(20px);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .float {
+        animation: floating 3s ease-in-out infinite;
+      }
+      @keyframes floating {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      .pulse-soft {
+        animation: pulse-soft 2s infinite;
+      }
+      @keyframes pulse-soft {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      /* --- Cloud Minigame Animations --- */
+      .cloud-float {
+        animation: cloudMove 4s ease-in-out infinite alternate;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .cloud-float:hover {
+        transform: scale(1.1);
+      }
+
+      @keyframes cloudMove {
+        from {
+          transform: translateX(-10px);
+        }
+        to {
+          transform: translateX(10px);
+        }
+      }
+
+      .cloud-pop {
+        animation: popOut 0.4s ease-out forwards;
+      }
+      @keyframes popOut {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1.5);
+          opacity: 0;
+        }
+      }
+
+      /* --- Glass & Cards --- */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      /* --- Hanging Photo Gallery Style --- */
+      .hanging-container {
+        perspective: 1000px;
+      }
+      .hanging-photo {
+        transform-origin: top center;
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        position: relative;
+      }
+      .hanging-photo:hover {
+        transform: rotateX(10deg) scale(1.05) translateY(-5px);
+        z-index: 20;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      }
+
+      .string {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        width: 2px;
+        height: 35px;
+        background: #e2e8f0;
+        z-index: -1;
+      }
+      .clip {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 12px;
+        height: 20px;
+        background: #d4a373;
+        border-radius: 4px;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+      }
+
+      /* --- Bouquet Layout --- */
+      .emoji-bouquet {
+        position: relative;
+        width: 200px;
+        height: 220px;
+        margin: 0 auto;
+      }
+      .emoji-flower {
+        position: absolute;
+        font-size: 3.5rem;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        transition: transform 0.3s;
+      }
+      .emoji-flower:hover {
+        transform: scale(1.2) rotate(10deg);
+        z-index: 10;
+      }
+      .bouquet-wrap {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 5rem;
+        z-index: 20;
+      }
+
+      /* --- Utilities --- */
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      #photo-overlay {
+        backdrop-filter: blur(8px);
+      }
+    </style>
+  </head>
+  <body class="bg-slate-900 text-white h-screen w-full relative selection:bg-pink-300 selection:text-pink-900 overflow-hidden">
+    <!-- Background Layer -->
+    <div id="bg-layer" class="absolute inset-0 bg-gradient-to-b from-gray-900 via-slate-800 to-gray-900 transition-colors duration-1000 z-0"></div>
+
+    <!-- Intro Screen -->
+    <div id="intro-screen" class="absolute inset-0 flex flex-col items-center justify-center z-50 transition-opacity duration-1000 p-6">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4 text-center text-pink-100 drop-shadow-lg handwriting">Haii, Nona Acit... 🌙</h1>
+      <p class="text-lg md:text-xl text-slate-300 text-center max-w-md leading-relaxed">
+        Tau kok, hari ini pasti capek banget ya?<br />
+        Rasanya berat, banyak pikiran...<br />
+        Kita usir mendungnya dulu yuk?
+      </p>
+      <button
+        onclick="startCloudGame()"
+        class="mt-10 px-8 py-3 bg-slate-600 hover:bg-slate-500 text-white rounded-full font-bold shadow-lg shadow-slate-500/30 transition transform hover:scale-105 active:scale-95 animate-pulse border border-slate-400"
+      >
+        Usir Awan Mendung ☁️
+      </button>
+    </div>
+
+    <!-- MINIGAME 1: Cloud Clearing -->
+    <div id="cloud-game-area" class="absolute inset-0 z-20 hidden">
+      <div class="absolute top-10 w-full text-center pointer-events-none">
+        <p class="text-white/90 text-xl font-bold pulse-soft drop-shadow-md">Klik awannya biar hilang!</p>
+        <p id="cloud-counter" class="text-sm text-slate-400 mt-1">Sisa: 10 Awan</p>
+      </div>
+      <!-- Clouds will be injected here by JS -->
+    </div>
+
+    <!-- MINIGAME 2: Garden Area (Interactive Canvas) -->
+    <div id="garden-area" class="absolute inset-0 z-10 hidden cursor-pointer" onclick="plantFlower(event)">
+      <div class="absolute bottom-16 w-full text-center pointer-events-none px-4">
+        <p class="text-white/90 text-sm md:text-lg pulse-soft mb-3 bg-black/20 inline-block px-5 py-2 rounded-full backdrop-blur-sm border border-white/10">Sekarang langit udah cerah, ayo tanam harapan 🌱</p>
+        <div class="w-64 md:w-80 h-3 bg-gray-700/50 rounded-full mx-auto overflow-hidden border border-white/20 backdrop-blur-sm">
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-pink-400 to-purple-400 w-0 transition-all duration-300 shadow-[0_0_10px_rgba(236,72,153,0.5)]"></div>
+        </div>
+        <p id="flower-counter-text" class="text-xs text-white/50 mt-2 font-mono">0/20 Bunga</p>
+      </div>
+    </div>
+
+    <!-- Final Surprise Container (Scrollable) -->
+    <div id="final-screen" class="absolute inset-0 z-50 hidden bg-pink-50/95 overflow-y-auto hide-scrollbar transition-opacity duration-1000 opacity-0">
+      <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4 w-full max-w-4xl mx-auto">
+        <!-- Bouquet -->
+        <div class="emoji-bouquet float mb-6">
+          <div class="emoji-flower" style="top: 20px; left: 20px; transform: rotate(-15deg)">🌿</div>
+          <div class="emoji-flower" style="top: 10px; left: 110px; transform: rotate(15deg)">🌿</div>
+          <div class="emoji-flower" style="top: 0px; left: 65px">🌻</div>
+          <div class="emoji-flower" style="top: 40px; left: 0px; transform: rotate(-20deg)">🌹</div>
+          <div class="emoji-flower" style="top: 30px; left: 130px; transform: rotate(20deg)">🌷</div>
+          <div class="emoji-flower" style="top: 50px; left: 40px">🌸</div>
+          <div class="emoji-flower" style="top: 50px; left: 90px">🌺</div>
+          <div class="emoji-flower" style="top: 80px; left: 20px; transform: rotate(-10deg)">🌼</div>
+          <div class="emoji-flower" style="top: 80px; left: 110px; transform: rotate(10deg)">🥀</div>
+          <div class="emoji-flower" style="top: 90px; left: 65px; z-index: 5">💐</div>
+          <div class="bouquet-wrap">🎀</div>
+        </div>
+
+        <!-- The Letter -->
+        <div class="glass-card p-8 md:p-10 rounded-3xl shadow-xl w-full text-slate-800 transform transition-all duration-700 translate-y-10 mb-12 relative overflow-hidden" id="letter-card">
+          <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-300 via-purple-300 to-pink-300"></div>
+          <h2 class="text-3xl md:text-4xl font-bold text-pink-600 mb-6 handwriting text-center">Buat Astrid Helviana</h2>
+          <div class="space-y-5 text-sm md:text-base leading-loose font-medium text-slate-600 text-justify">
+            <p>Liat deh acitt, awan mendungnya udah hilang, dan sekarang tumbuh kebun cantik banget. Isinya warna-warni, persis kayak kamu.</p>
+            <p>
+              Aku tau belakangan ini lagi berat, mungkin kamu ngerasa "ah aku gak bisa nih" atau ngerasa kurang. Eits, jangan salah.
+              <span class="bg-pink-100 px-2 py-0.5 rounded text-pink-700 font-bold border border-pink-200">Kamu itu keren tau.</span> Serius.
+            </p>
+            <p>Jangan biarkan hal-hal mendung bikin kamu lupa kalau kamu itu matahari buat orang lain. Kegigihan kamu, senyum kamu, capeknya kamu... semuanya berharga.</p>
+            <p>Jangan lupa istirahat ya, jangan dipaksain kalau emang capek. Inget, aku selalu ada di sini buat dukung kamu. Semangat terus ya cantik!</p>
+          </div>
+          <div class="mt-10 flex justify-end items-center gap-2">
+            <span class="text-xs text-slate-400 uppercase tracking-widest">From:</span>
+            <span class="font-bold text-pink-500 handwriting text-2xl">Pendukung No. 1 mu</span>
+          </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="w-full mb-12">
+          <div class="text-center mb-10">
+            <span class="bg-white/80 px-4 py-1 rounded-full text-pink-400 text-xs font-bold tracking-[0.2em] shadow-sm uppercase">Faces of Acit ヾ(≧▽≦*)o</span>
+          </div>
+          <div class="flex flex-wrap justify-center gap-x-6 gap-y-12 md:gap-x-10 md:gap-y-16 px-2 hanging-container">
+            <!-- Photos -->
+            <div class="relative group cursor-pointer" onclick="openPhoto(this)">
+              <div class="string"></div>
+              <div class="clip"></div>
+              <div class="hanging-photo bg-white p-3 pb-8 shadow-md rounded-sm w-36 md:w-40 rotate-[-2deg]">
+                <img src="img/acit1.jpeg" class="w-full aspect-square object-cover rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div class="text-center text-xs text-gray-400 mt-3 font-handwriting text-lg">😉</div>
+              </div>
+            </div>
+            <div class="relative group cursor-pointer" onclick="openPhoto(this)">
+              <div class="string"></div>
+              <div class="clip"></div>
+              <div class="hanging-photo bg-white p-3 pb-8 shadow-md rounded-sm w-36 md:w-40 rotate-[3deg]">
+                <img src="img/acit2.jpeg" class="w-full aspect-square object-cover rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div class="text-center text-xs text-gray-400 mt-3 font-handwriting text-lg">😁</div>
+              </div>
+            </div>
+            <div class="relative group cursor-pointer" onclick="openPhoto(this)">
+              <div class="string"></div>
+              <div class="clip"></div>
+              <div class="hanging-photo bg-white p-3 pb-8 shadow-md rounded-sm w-36 md:w-40 rotate-[-1deg]">
+                <img src="img/acit3.jpeg" class="w-full aspect-square object-cover rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div class="text-center text-xs text-gray-400 mt-3 font-handwriting text-lg">😋</div>
+              </div>
+            </div>
+            <div class="relative group cursor-pointer" onclick="openPhoto(this)">
+              <div class="string"></div>
+              <div class="clip"></div>
+              <div class="hanging-photo bg-white p-3 pb-8 shadow-md rounded-sm w-36 md:w-40 rotate-[2deg]">
+                <img src="img/acit4.jpeg" class="w-full aspect-square object-cover rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div class="text-center text-xs text-gray-400 mt-3 font-handwriting text-lg">😼</div>
+              </div>
+            </div>
+            <div class="relative group cursor-pointer" onclick="openPhoto(this)">
+              <div class="string"></div>
+              <div class="clip"></div>
+              <div class="hanging-photo bg-white p-3 pb-8 shadow-md rounded-sm w-36 md:w-40 rotate-[-3deg]">
+                <img src="img/acit5.jpeg" class="w-full aspect-square object-cover rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div class="text-center text-xs text-gray-400 mt-3 font-handwriting text-lg">😴</div>
+              </div>
+            </div>
+            <div class="relative group cursor-pointer" onclick="openPhoto(this)">
+              <div class="string"></div>
+              <div class="clip"></div>
+              <div class="hanging-photo bg-white p-3 pb-8 shadow-md rounded-sm w-36 md:w-40 rotate-[1deg]">
+                <img src="img/acit6.jpeg" class="w-full aspect-square object-cover rounded-sm grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div class="text-center text-xs text-gray-400 mt-3 font-handwriting text-lg">😾</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="location.reload()" class="mt-4 mb-8 px-6 py-2 bg-white text-pink-400 rounded-full hover:bg-pink-50 transition font-bold text-sm shadow-sm border border-pink-100 flex items-center gap-2 group">
+          <span class="group-hover:-rotate-180 transition-transform duration-500">↻</span> Ulangi Dari Awal
+        </button>
+      </div>
+    </div>
+
+    <!-- Overlay & Audio -->
+    <div id="photo-overlay" class="fixed inset-0 z-[60] hidden bg-black/80 flex items-center justify-center p-4 cursor-zoom-out" onclick="closePhoto()">
+      <img id="overlay-img" src="" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl transform scale-90 transition-transform duration-300 border-4 border-white" />
+    </div>
+
+    <audio id="bg-music" loop>
+      <source src="audio/gluesong.mp3" type="audio/mpeg" />
+      Browser kamu tidak mendukung elemen audio.
+    </audio>
+
+    <script>
+      /* --- Config & State --- */
+      const config = {
+        totalClouds: 10,
+        totalFlowers: 20,
+        colors: ['#f472b6', '#fb7185', '#e879f9', '#c084fc', '#fcd34d', '#34d399', '#60a5fa', '#f87171', '#fbbf24', '#a78bfa', '#ec4899', '#f43f5e'],
+        messages: [
+          'Hai Cantik! 👋',
+          'Semangat ya Cit!',
+          'Jangan sedih...',
+          'Kamu keren tau!',
+          'Tarik napas dulu...',
+          'Aku padamu!',
+          'Pasti bisa kok.',
+          'Istirahat bentar yuk.',
+          'Senyum dikit dong :)',
+          'Kamu itu berharga.',
+          'Badai pasti berlalu.',
+          'Acit kuat banget!',
+          'Peluk online 🤗',
+          'Jangan lupa mam.',
+          'Every step of the way!',
+          'Gapapa capek dikit.',
+          'Besok pasti lebih baik.',
+          'Kamu cukup kok.',
+          'Proud of you! 🌟',
+          'Selesai! Yey! 🎉',
+        ],
+      };
+
+      let state = {
+        cloudsPopped: 0,
+        flowerCount: 0,
+        isFinished: false,
+      };
+
+      /* --- Audio Logic --- */
+      function playMusic() {
+        const music = document.getElementById('bg-music');
+        if (music) {
+          music.volume = 0.5;
+          music.play().catch((error) => console.log('Autoplay blocked:', error));
+        }
+      }
+
+      /* --- Phase 1: Cloud Game --- */
+      function startCloudGame() {
+        playMusic();
+        const intro = document.getElementById('intro-screen');
+        const cloudArea = document.getElementById('cloud-game-area');
+
+        intro.style.opacity = '0';
+        setTimeout(() => {
+          intro.style.display = 'none';
+          cloudArea.classList.remove('hidden');
+          spawnClouds();
+        }, 1000);
+      }
+
+      function spawnClouds() {
+        const cloudArea = document.getElementById('cloud-game-area');
+        const counter = document.getElementById('cloud-counter');
+
+        for (let i = 0; i < config.totalClouds; i++) {
+          const cloud = document.createElement('div');
+          cloud.innerHTML = '☁️';
+          cloud.classList.add('absolute', 'cloud-float', 'text-6xl', 'md:text-8xl', 'opacity-90', 'select-none');
+
+          // Random dark colors/grayscale
+          cloud.style.filter = 'grayscale(100%) brightness(50%) drop-shadow(0 10px 10px rgba(0,0,0,0.5))';
+
+          // Random Position
+          cloud.style.left = Math.random() * 80 + 10 + '%';
+          cloud.style.top = Math.random() * 60 + 10 + '%';
+
+          // Random Delay for float
+          cloud.style.animationDelay = Math.random() * 2 + 's';
+
+          cloud.onclick = function () {
+            popCloud(this);
+          };
+          cloudArea.appendChild(cloud);
+        }
+      }
+
+      function popCloud(element) {
+        if (element.classList.contains('popped')) return;
+        element.classList.add('popped');
+
+        // Visual Pop
+        element.classList.remove('cloud-float');
+        element.classList.add('cloud-pop');
+
+        state.cloudsPopped++;
+
+        // Update Counter
+        const remaining = config.totalClouds - state.cloudsPopped;
+        const counter = document.getElementById('cloud-counter');
+        counter.innerText = remaining > 0 ? `Sisa: ${remaining} Awan` : 'Langit Cerah!';
+
+        // Remove from DOM
+        setTimeout(() => element.remove(), 400);
+
+        // Check completion
+        if (state.cloudsPopped >= config.totalClouds) {
+          setTimeout(startGardenPhase, 800);
+        }
+      }
+
+      /* --- Phase 2: Garden Game --- */
+      function startGardenPhase() {
+        const cloudArea = document.getElementById('cloud-game-area');
+        const garden = document.getElementById('garden-area');
+        const bg = document.getElementById('bg-layer');
+
+        // Transition BG
+        bg.classList.remove('from-gray-900', 'via-slate-800', 'to-gray-900');
+        bg.classList.add('from-indigo-900', 'via-purple-900', 'to-slate-800');
+
+        cloudArea.classList.add('hidden');
+        garden.classList.remove('hidden');
+      }
+
+      function plantFlower(e) {
+        if (state.isFinished) return;
+        const garden = document.getElementById('garden-area');
+        const counter = document.getElementById('flower-counter-text');
+
+        // Create Flower
+        const flower = document.createElement('div');
+        flower.classList.add('absolute', 'flower-appear', 'pointer-events-none');
+
+        const offsetX = (Math.random() - 0.5) * 20;
+        const offsetY = (Math.random() - 0.5) * 20;
+        flower.style.left = `${e.clientX + offsetX}px`;
+        flower.style.top = `${e.clientY + offsetY}px`;
+
+        const color = config.colors[Math.floor(Math.random() * config.colors.length)];
+        const size = Math.floor(Math.random() * 30) + 40;
+        const rotation = Math.random() * 60 - 30;
+        const msgIndex = Math.min(state.flowerCount, config.messages.length - 1);
+        const msg = config.messages[msgIndex];
+
+        flower.innerHTML = `
+            <div style="--tw-rotate: ${rotation}deg" class="relative group z-10">
+                <svg width="${size}" height="${size}" viewBox="0 0 100 100" fill="none" class="drop-shadow-lg">
+                    <path d="M50 100V50" stroke="#15803d" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M50 50 L30 40" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M50 50 L70 40" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="50" cy="50" r="15" fill="${color}" />
+                    <circle cx="35" cy="40" r="12" fill="${color}" opacity="0.9"/>
+                    <circle cx="65" cy="40" r="12" fill="${color}" opacity="0.9"/>
+                    <circle cx="50" cy="25" r="12" fill="${color}" opacity="0.9"/>
+                    <circle cx="35" cy="60" r="12" fill="${color}" opacity="0.9"/>
+                    <circle cx="65" cy="60" r="12" fill="${color}" opacity="0.9"/>
+                    <circle cx="50" cy="50" r="6" fill="#fef08a" />
+                </svg>
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-md animate-[fadeUp_1.5s_ease-out_forwards]">${msg}</div>
+            </div>`;
+
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes fadeUp { 0% { transform: translate(-50%, 10px); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(-50%, -20px); opacity: 0; } }`;
+        flower.appendChild(style);
+        garden.appendChild(flower);
+
+        state.flowerCount++;
+        counter.innerText = `${state.flowerCount}/${config.totalFlowers} Bunga`;
+        updateProgress();
+        updateBackground();
+
+        if (state.flowerCount >= config.totalFlowers) {
+          state.isFinished = true;
+          counter.innerText = 'Kebun penuh! 🌸';
+          setTimeout(finishGame, 1800);
+        }
+      }
+
+      function updateProgress() {
+        const pct = (state.flowerCount / config.totalFlowers) * 100;
+        document.getElementById('progress-bar').style.width = `${pct}%`;
+      }
+
+      function updateBackground() {
+        const bg = document.getElementById('bg-layer');
+        if (state.flowerCount === 5) bg.className = 'absolute inset-0 bg-gradient-to-b from-purple-800 via-pink-800 to-purple-900 transition-colors duration-1000 z-0';
+        if (state.flowerCount === 10) bg.className = 'absolute inset-0 bg-gradient-to-b from-pink-600 via-rose-500 to-orange-400 transition-colors duration-1000 z-0';
+        if (state.flowerCount === 15) bg.className = 'absolute inset-0 bg-gradient-to-b from-blue-300 via-pink-200 to-white transition-colors duration-1000 z-0';
+      }
+
+      function finishGame() {
+        const garden = document.getElementById('garden-area');
+        const final = document.getElementById('final-screen');
+        const letter = document.getElementById('letter-card');
+        garden.style.opacity = '0';
+        setTimeout(() => {
+          garden.style.display = 'none';
+          final.classList.remove('hidden');
+          setTimeout(() => {
+            final.style.opacity = '1';
+            letter.classList.remove('translate-y-10');
+          }, 100);
+        }, 1000);
+      }
+
+      /* --- Gallery Interaction --- */
+      function openPhoto(element) {
+        const imgSrc = element.querySelector('img').src;
+        const overlay = document.getElementById('photo-overlay');
+        const img = document.getElementById('overlay-img');
+        img.src = imgSrc;
+        overlay.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          img.classList.remove('scale-90');
+          img.classList.add('scale-100');
+        });
+      }
+
+      function closePhoto() {
+        const overlay = document.getElementById('photo-overlay');
+        const img = document.getElementById('overlay-img');
+        img.classList.remove('scale-100');
+        img.classList.add('scale-90');
+        setTimeout(() => {
+          overlay.classList.add('hidden');
+        }, 300);
+      }
+    </script>
+  </body>
+</html>
